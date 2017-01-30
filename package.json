@@ -17,7 +17,13 @@
   },
   "homepage": "https://github.com/yerevin/SUGO-API#readme",
   "dependencies": {
+    "good": "^7.1.0",
+    "good-console": "^6.2.0",
     "hapi": "^16.1.0",
-    "joi": "^10.2.0"
+    "hapi-swagger": "^7.6.0",
+    "inert": "^4.1.0",
+    "joi": "^10.2.0",
+    "mongoose": "^4.7.9",
+    "vision": "^4.1.1"
   }
 }

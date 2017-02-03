@@ -17,7 +17,8 @@ var mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/restdemo');
 
 // Importing `user` model from `models/user.js` file
-var UserModel = require('./models/user');
+var UserModel = require('./models/User');
+var EventModel = require('./models/Event');
 
 // Define PORT number You can change it if you want
 server.connection({  
@@ -39,15 +40,7 @@ server.register([
     {
 	    register: require('hapi-swagger'),
 	    options: options
-}], (err) => {
-        server.start( (err) => {
-           if (err) {
-                console.log(err);
-            } else {
-                console.log('Server running at:', server.info.uri);
-            }
-    });
-});   
+}]);   
 
 // Fetching all users data
 server.route({
@@ -148,8 +141,11 @@ server.route({
                 id: Joi.string().required()
             },
             payload: {
-                name: Joi.string(),
-                age: Joi.number()
+                name: Joi.string().required(),
+                surname: Joi.string().required(),
+                pseudonim: Joi.string().required(),
+                avatar: Joi.string().required(),
+                age: Joi.number().required()
             }
         }
     },
@@ -177,7 +173,7 @@ server.route({
 
 server.route({
     method: 'POST',
-    path: '/api/user',
+    path: '/api/user/sign-up',
     config: {
         cors: {
             origin: ['*']
@@ -187,8 +183,10 @@ server.route({
         notes: 'Save user data',
         validate: {
             payload: {
-                name: Joi.string().required(),
-                age: Joi.number().required()
+            	name: Joi.string().min(3).max(30).required(),
+                email: Joi.string().required().email(),
+                password: Joi.number().required().regex(/^[a-zA-Z0-9]{3,30}$/),
+                password_confirmation: Joi.any().valid(Joi.ref('password')).required()
             }
         }
     },
@@ -208,6 +206,44 @@ server.route({
                 reply({
                     statusCode: 201,
                     message: 'User Saved Successfully'
+                });
+            }
+        });
+    }
+});
+
+server.route({
+    method: 'POST',
+    path: '/api/user/log-in',
+    config: {
+        cors: {
+            origin: ['*']
+        },
+        tags: ['api'],
+        description: 'Save user data',
+        notes: 'Save user data',
+        validate: {
+            payload: {
+                email: Joi.string().required().email(),
+                password: Joi.number().required().regex(/^[a-zA-Z0-9]{3,30}$/)
+            }
+        }
+    },
+    handler: function (request, reply) {
+
+        // `findOneAndUpdate` is a mongoose modal methods to update a particular record.
+        UserModel.findOne({email: request.payload.email, password: request.payload.password}, request.payload, function (error, data) {
+            if (error) {
+                reply({
+                    statusCode: 503,
+                    message: 'Failed to get data',
+                    data: error
+                });
+            } else {
+                reply({
+                    statusCode: 200,
+                    message: 'User Updated Successfully',
+                    data: data
                 });
             }
         });

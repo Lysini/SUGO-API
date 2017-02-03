@@ -185,7 +185,7 @@ server.route({
             payload: {
             	name: Joi.string().min(3).max(30).required(),
                 email: Joi.string().required().email(),
-                password: Joi.number().required().regex(/^[a-zA-Z0-9]{3,30}$/),
+                password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required(),
                 password_confirmation: Joi.any().valid(Joi.ref('password')).required()
             }
         }
@@ -214,6 +214,45 @@ server.route({
 
 server.route({
     method: 'POST',
+    path: '/api/event/',
+    config: {
+        cors: {
+            origin: ['*']
+        },
+        tags: ['api'],
+        description: 'Save event data',
+        notes: 'Save event data',
+        validate: {
+            payload: {
+                name: Joi.string().required(),
+                surname: Joi.string().required(),
+            }
+        }
+    },
+    handler: function (request, reply) {
+
+        // Create mongodb user object to save it into database
+        var Event = new EventModel(request.payload);
+
+        //Call save methods to save data into database and pass callback methods to handle error
+        Event.save(function (error) {
+            if (error) {
+                reply({
+                    statusCode: 503,
+                    message: error
+                });
+            } else {
+                reply({
+                    statusCode: 201,
+                    message: 'User Saved Successfully'
+                });
+            }
+        });
+    }
+});
+
+server.route({
+    method: 'POST',
     path: '/api/user/log-in',
     config: {
         cors: {
@@ -225,7 +264,7 @@ server.route({
         validate: {
             payload: {
                 email: Joi.string().required().email(),
-                password: Joi.number().required().regex(/^[a-zA-Z0-9]{3,30}$/)
+                password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required()
             }
         }
     },

@@ -224,6 +224,7 @@ server.route({
         notes: 'Save event data',
         validate: {
             payload: {
+                organizer_id: Joi.string().required(),
                 event_name: Joi.string().required(),
                 stuff: Joi.object({
                     stuff_label: Joi.string().required(),
@@ -271,12 +272,23 @@ server.route({
                     message: error
                 });
             } else {
-                reply({
-                    statusCode: 201,
-                    message: 'User Saved Successfully'
+                UserModel.findOneAndUpdate({_id: request.payload.organizer_id}, { $push: { events: Event._id } }, function (error, data) {
+                    if (error) {
+                        reply({
+                            statusCode: 503,
+                            message: 'Failed to get data',
+                            data: error
+                        });
+                    } else {
+                        reply({
+                            statusCode: 200,
+                            message: 'User Updated Successfully',
+                            data: data
+                        });
+                    }
                 });
             }
-        });
+        })
     }
 });
 

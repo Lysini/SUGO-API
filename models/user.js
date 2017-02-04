@@ -1,7 +1,5 @@
 var mongoose = require('mongoose');
 
-//var Event = require('./Event');
-
 var Schema = mongoose.Schema;
 
 // Create the MovieSchema.

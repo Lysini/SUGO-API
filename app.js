@@ -71,7 +71,7 @@ server.route({
                     data: data
                 });
             }
-        });
+        }).populate('events');
     }
 });
 

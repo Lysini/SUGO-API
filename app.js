@@ -224,8 +224,37 @@ server.route({
         notes: 'Save event data',
         validate: {
             payload: {
-                name: Joi.string().required(),
-                surname: Joi.string().required(),
+                event_name: Joi.string().required(),
+                stuff: Joi.object({
+                    stuff_label: Joi.string().required(),
+                    stuff_array: Joi.array().items(Joi.object({
+                            stuff_name: Joi.string(),
+                            stuff_price: Joi.number(),
+                            stuff_amount: Joi.number()
+                        })
+                    )
+                }),
+                people: Joi.object({
+                    people_men: Joi.array().items(Joi.object({
+                            men_name: Joi.string(),
+                            men_note: Joi.string()
+                        })
+                    ),
+                    people_women: Joi.array().items(Joi.object({
+                            women_name: Joi.string(),
+                            women_note: Joi.string()
+                        })
+                    ),
+                    people_number: Joi.number().required()
+                }),
+                place: Joi.object({
+                    place_name: Joi.string().required(),
+                    place_location: Joi.string().required(),
+                    place_price: Joi.number().required(),
+                    place_max_people: Joi.number().required(),
+                    place_note: Joi.string().required()
+                }),
+                special_info: Joi.string().required()
             }
         }
     },
@@ -245,6 +274,38 @@ server.route({
                 reply({
                     statusCode: 201,
                     message: 'User Saved Successfully'
+                });
+            }
+        });
+    }
+});
+
+server.route({
+    method: 'GET',
+    path: '/api/event',
+    config: {
+        cors: {
+            origin: ['*']
+        },
+        // Include this API in swagger documentation
+        tags: ['api'],
+        description: 'Get All Event data',
+        notes: 'Get All Event data'
+    },
+    handler: function (request, reply) {
+        //Fetch all data from mongodb User Collection
+        EventModel.find({}, function (error, data) {
+            if (error) {
+                reply({
+                    statusCode: 503,
+                    message: 'Failed to get data',
+                    data: error
+                });
+            } else {
+                reply({
+                    statusCode: 200,
+                    message: 'User Data Successfully Fetched',
+                    data: data
                 });
             }
         });

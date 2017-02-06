@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/yerevin/SUGO-API#readme",
   "dependencies": {
+    "bcryptjs": "^2.4.0",
     "good": "^7.1.0",
     "good-console": "^6.2.0",
     "hapi": "^16.1.0",

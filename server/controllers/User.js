@@ -83,22 +83,32 @@ exports.logIn = {
 		}
 	},
     handler: function (request, reply) {
-        UserModel.findOne({email: request.payload.email, password: request.payload.password}, request.payload, function (error, data) {
-            if (error) {
-                reply({
-                    statusCode: 503,
-                    message: 'Failed to get data',
-                    data: error
-                });
-            } else {
-                reply({
-                    statusCode: 200,
-                    message: 'User Updated Successfully',
-                    data: data
-                });
-            }
-        });
-    }
+		UserModel.findOne({ email: request.payload.email }, function(err, User) {
+		    if (err) throw err;
+		    User.comparePassword(request.payload.password, function(err, isMatch) {
+		        if (err) {
+	                reply({
+	                    statusCode: 503,
+	                    message: 'Failed to get data',
+	                    data: err
+	                });
+	            }
+				else if (isMatch) {
+	                reply({
+	                    statusCode: 200,
+	                    message: 'User Logged Successfully',
+	                    data: User._id
+	                });
+	            }
+	            else {
+	                reply({
+	                    statusCode: 403,
+	                    message: 'User Bad Password'
+	                });
+	            }
+		    });
+		});
+   }
 };
 
 exports.signUp = {

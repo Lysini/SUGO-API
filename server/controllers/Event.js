@@ -42,15 +42,7 @@ exports.save = {
 		payload: {
 			organizer_id: Joi.string().required(),
 			event_name: Joi.string().required(),
-			stuff: Joi.object({
-				stuff_label: Joi.string().required(),
-				stuff_array: Joi.array().items(Joi.object({
-					stuff_name: Joi.string(),
-					stuff_price: Joi.number(),
-					stuff_amount: Joi.number()
-				})
-				)
-			}),
+			stuff: Joi.array(),
 			people: Joi.object({
 				people_men: Joi.array().items(Joi.object({
 					men_name: Joi.string(),
@@ -62,16 +54,16 @@ exports.save = {
 					women_note: Joi.string()
 				})
 				),
-				people_number: Joi.number().required()
+				people_number: Joi.number()
 			}),
 			place: Joi.object({
-				place_name: Joi.string().required(),
-				place_location: Joi.string().required(),
-				place_price: Joi.number().required(),
-				place_max_people: Joi.number().required(),
-				place_note: Joi.string().required()
+				place_name: Joi.string(),
+				place_location: Joi.string(),
+				place_price: Joi.number(),
+				place_max_people: Joi.number(),
+				place_note: Joi.string()
 			}),
-			special_info: Joi.string().required()
+			special_info: Joi.string()
 		}
 	},
 	handler: function (request, reply) {

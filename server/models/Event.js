@@ -9,26 +9,7 @@ var EventSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
-  stuff: {
-    stuff_label: {
-      type: String,
-      required: true,
-    },
-    stuff_array: [{
-      stuff_name: {
-        type: String,
-        required: true
-      },
-      stuff_price: {
-        type: Number,
-        required:true
-      },
-      stuff_amount: {
-        type: Number,
-        required:true
-      }
-    }],
-  },
+  stuff: [],
   people: {
     people_men: [{
       men_name: {

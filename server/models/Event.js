@@ -6,61 +6,61 @@ var EventSchema = new mongoose.Schema({
     type: String,
   },
   event_name: {
-    type: String,
-    required: true,
+    type: String
   },
-  stuff: [],
+  stuff: [{
+    labelName: {
+      type: String,
+    },
+    stuffArray: [{
+      stuffAmount: {
+        type: Number
+      },
+      stuffName: {
+        type: String
+      },
+      stuffPrice: {
+        type: Number
+      }
+    }],
+  }],
   people: {
-    people_men: [{
-      men_name: {
-        type: String,
-        required: true
+    peopleMen: [{
+      peopleName: {
+        type: String
       },
-      men_note: {
-        type: String,
-        required:true
+      peopleNote: {
+        type: String
       },
     }],
-    people_women: [{
-      women_name: {
-        type: String,
-        required: true
+    peopleWomen: [{
+      peopleName: {
+        type: String
       },
-      women_note: {
-        type: String,
-        required:true
+      peopleNote: {
+        type: String
       },
-    }],
-    people_number:{
-      type: Number,
-      required: true
-    }
+    }]
   },
   place: {
-    place_name: {
+    placeName: {
       type: String,
-      required: true,
     },
-    place_location: {
+    placeLocation: {
       type: String,
-      required: true,
     },
-    place_price: {
+    placePrice: {
       type: Number,
-      required: true,
     },
-    place_max_people: {
+    placeMax: {
       type: Number,
-      required: true,
     },
-    place_note: {
+    placeNote: {
       type: String,
-      required: true,
     },
   },
   special_info: {
-    type: String,
-    required: true
+    type: String
   }
 });
 

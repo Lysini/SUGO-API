@@ -41,27 +41,33 @@ exports.save = {
 	validate: {
 		payload: {
 			organizer_id: Joi.string().required(),
-			event_name: Joi.string().required(),
-			stuff: Joi.array(),
+			event_name: Joi.string(),
+			stuff: Joi.array().items(Joi.object().keys({
+				labelName: Joi.string(),
+				stuffArray: Joi.array().items(Joi.object().keys({
+					stuffName: Joi.string(),
+					stuffPrice: Joi.number(),
+					stuffAmount: Joi.number()
+				}))
+			})),
 			people: Joi.object({
-				people_men: Joi.array().items(Joi.object({
-					men_name: Joi.string(),
-					men_note: Joi.string()
+				peopleMen: Joi.array().items(Joi.object({
+					peopleName: Joi.string(),
+					peopleNote: Joi.string()
 				})
 				),
-				people_women: Joi.array().items(Joi.object({
-					women_name: Joi.string(),
-					women_note: Joi.string()
+				peopleWomen: Joi.array().items(Joi.object({
+					peopleName: Joi.string(),
+					peopleNote: Joi.string()
 				})
-				),
-				people_number: Joi.number()
+				)
 			}),
 			place: Joi.object({
-				place_name: Joi.string(),
-				place_location: Joi.string(),
-				place_price: Joi.number(),
-				place_max_people: Joi.number(),
-				place_note: Joi.string()
+				placeName: Joi.string(),
+				placeLocation: Joi.string(),
+				placePrice: Joi.number(),
+				placeMax: Joi.number(),
+				placeNote: Joi.string()
 			}),
 			special_info: Joi.string()
 		}

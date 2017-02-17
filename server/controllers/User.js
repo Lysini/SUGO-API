@@ -158,10 +158,8 @@ exports.update = {
 		},
 		payload: {
 			name: Joi.string().required(),
-			surname: Joi.string().required(),
-			pseudonim: Joi.string().required(),
-			avatar: Joi.string().required(),
-			age: Joi.number().required()
+			avatar: Joi.string(),
+			age: Joi.number()
 		}
 	},
 	handler: function (request, reply) {

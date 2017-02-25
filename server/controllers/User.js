@@ -6,6 +6,8 @@ const mongoose = require('mongoose');
 var bcrypt = require('bcryptjs');
 var SALT_WORK_FACTOR = 10;
 
+
+
 exports.getAll = {
 	cors: {
 		origin: ['*']
@@ -159,9 +161,45 @@ exports.update = {
 			id: Joi.string().required()
 		},
 		payload: {
-			name: Joi.string().required(),
-			avatar: Joi.string(),
-			age: Joi.number()
+			name: Joi.string(),
+			avatar: Joi.any(),
+			age: Joi.number(),
+			note: Joi.number()
+		}
+	},
+	handler: function (request, reply) {
+		UserModel.findOneAndUpdate({_id: request.params.id}, request.payload, function (error, data) {
+			if (error) {
+				reply({
+					statusCode: 503,
+					message: 'Failed to get data',
+					data: error
+				});
+			} else {
+				reply({
+					statusCode: 200,
+					message: 'User Updated Successfully',
+					data: data
+				});
+			}
+		});
+
+	}
+};
+
+exports.updateAvatar = {
+	cors: {
+		origin: ['*']
+	},
+	tags: ['api'],
+	description: 'Update specific user data',
+	notes: 'Update specific user data',
+	validate: {
+		params: {
+			id: Joi.string().required()
+		},
+		payload: {
+			avatar: Joi.string()
 		}
 	},
 	handler: function (request, reply) {
@@ -284,3 +322,4 @@ exports.changePassword = {
 		});
    }
 };
+

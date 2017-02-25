@@ -21,10 +21,13 @@
     "good": "^7.1.0",
     "good-console": "^6.2.0",
     "hapi": "^16.1.0",
+    "hapi-bully-imageupload": "^1.2.1",
     "hapi-swagger": "^7.6.0",
     "inert": "^4.1.0",
     "joi": "^10.2.0",
-    "mongoose": "^4.7.9",
+    "mongoose": "^4.8.4",
+    "mongoose-gridfs": "^0.1.0",
+    "path": "^0.12.7",
     "react-simple-dropdown": "^2.0.0",
     "vision": "^4.1.1"
   }

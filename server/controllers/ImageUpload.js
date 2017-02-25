@@ -1,12 +1,9 @@
 'use strict';
 
 const mongoose = require('mongoose');
-var bcrypt = require('bcryptjs');
 var Joi = require('joi');
-var SALT_WORK_FACTOR = 10;
 var fs = require('fs');
 var path = require('path');
-var gridfs = require('mongoose-gridfs');
 var uuid = require('node-uuid');
 var digestStream = require('digest-stream');
 var HapiSwagger = require('hapi-swagger');
@@ -26,15 +23,14 @@ exports.imageUpload = {
 	},
 	validate: {
             payload: {
-                file: Joi.any()
+                image: Joi.any()
                     .meta({ swaggerType: 'file' })
-                    .description('json file')
+                    .description('image file')
             }
 	},
 	payload: {
-		maxBytes: 256000,
-		output: 'stream',
-		parse: true
+		maxBytes: 3256000,
+		output: 'stream'
 	},
 	handler: function(request, reply) {
 
@@ -53,8 +49,10 @@ exports.imageUpload = {
 			}).code(201);
 		};
 
+		if(!request.payload.image)
+			return sendFailure(400, 'Missing file');
 
-		var uploadStream = request.payload['image'];
+		var uploadStream = request.payload.image;
 
 		// A very quick and dirty way to check the file extension
 		var fileExt = path.extname(uploadStream.hapi.filename).substr(1).toLowerCase();
@@ -63,21 +61,22 @@ exports.imageUpload = {
 		var contentType = uploadStream.hapi.headers['content-type'];
 		// Store the file to te temp folder
 		var tmpFileName = uuid.v4() + '.' + fileExt;
-		var tmpFilePath = (require('os').tmpdir() + '/') + tmpFileName;
+		var tmpFilePath = require('os').tmpdir() + '/' + tmpFileName;
 		var fd = fs.createWriteStream(tmpFilePath);
 
-		// Create a digest hash based on the file's contents
 		var digestHash;
 		var dstream = digestStream('sha1', 'hex', function(digest) {
+			console.log('W SRODKU ' + digest);
 			digestHash = digest;
 		});
 
-		// Pipe through digest-stream to the temp file
 		uploadStream.pipe(dstream).pipe(fd);
-
-		uploadStream.on('end', function() {
+		
+		setTimeout(function(){ 
 			var newFileName = digestHash;
-			var newFilePath = (process.cwd() + '/uploads/') + newFileName;
+			var newFilePath = process.cwd() + '/uploads/' + newFileName;
+			console.log(digestHash);
+
 
 			// Check if a file with the same hash already exists
 			fs.access(newFilePath, function(nonExistent) {
@@ -100,7 +99,7 @@ exports.imageUpload = {
 					return sendSuccess(true, newFileName);
 				});
 			});
-		});
+		 }, 1500);	 
 	}
 };
 
@@ -119,7 +118,7 @@ exports.imageGet = {
 	handler: function(request, reply) {
 
 		var fileName = request.params.hash;
-		var filePath = (process.cwd() + '/uploads/') + fileName;
+		var filePath = process.cwd() + '/uploads/' + fileName;
 		// Check if the file exists
 		fs.access(filePath, function(nonExistent) {
 			if(nonExistent)

@@ -65,6 +65,7 @@ exports.getUser = {
                     reply({
                         statusCode: 200,
                         message: 'User Data Successfully Fetched',
+                        avatar: data.avatar.data,
                         data: data
                     });
                 }
@@ -221,6 +222,7 @@ exports.updateAvatar = {
 
 	}
 };
+
 
 exports.getUserEvents = {
 	cors: {

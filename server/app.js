@@ -55,15 +55,3 @@ server.register({
     });
 
 });
-
-server.register({
-    'register': require('hapi-bully-imageupload'),
-    'options': {
-        'allowedMimeTypes': [ 'image/jpg', 'image/png' ],
-        'uploadPath': process.cwd() + '/uploads/' // Notice the last slash
-    },
-    'routes': {
-        'prefix': '/upload'
-    }
-});
-

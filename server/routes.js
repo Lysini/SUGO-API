@@ -1,6 +1,6 @@
 var User = require('./controllers/User');
 var Event = require('./controllers/Event');
-var Organize = require('./controllers/Organize');
+var Class = require('./controllers/Class');
 var ClassUser = require('./controllers/ClassUser');
 
 
@@ -22,7 +22,7 @@ exports.endpoints = [
   { method: 'POST', path: '/classuser/sign-up', config: ClassUser.signUp},
   { method: 'GET', path: '/classuser/{id}', config: ClassUser.getUser},
   { method: 'GET', path: '/classuser/{id}/classes', config: ClassUser.getUserClasses},
-  { method: 'GET', path: '/Organize', config: Organize.getAll},
-  { method: 'POST', path: '/Organize', config: Organize.save},
-  { method: 'DELETE', path: '/Organize/{id}/delete', config: Organize.delete},
+  { method: 'GET', path: '/class', config: Class.getAll},
+  { method: 'POST', path: '/class', config: Class.save},
+  { method: 'DELETE', path: '/class/{id}/delete', config: Class.delete},
 ];

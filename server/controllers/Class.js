@@ -2,7 +2,7 @@
 
 const Joi = require('joi');
 const ClassUserModel = require('../models/ClassUser');
-const OrganizeModel = require('../models/Organize');
+const ClassModel = require('../models/Class');
 const mongoose = require('mongoose');
 
 exports.getAll = {
@@ -13,7 +13,7 @@ exports.getAll = {
 	description: 'Get All User data',
 	notes: 'Get All User data',
     handler: function (request, reply) {
-        OrganizeModel.find({}, function (error, data) {
+        ClassModel.find({}, function (error, data) {
             if (error) {
                 reply({
                     statusCode: 503,
@@ -43,34 +43,34 @@ exports.save = {
 			user_id: Joi.string().required(),
 			class_name: Joi.string(),
 			calendar: Joi.array().items(Joi.object().keys({
-				date_from: Joi.date(),
-				date_to: Joi.date(),
-				name: Joi.string(),
-				note: Joi.string(),
+				title: Joi.string(),
+				start: Joi.date(),
+				end: Joi.date(),
+				desc: Joi.string(),
 				
 			})),
 			collections: Joi.array().items(Joi.object().keys({
 				collection_aim: Joi.string(),
-				collection_value: Joi.string(),
+				collection_value: Joi.number(),
 				
 			})),
-			infromation: Joi.array().items(Joi.object().keys({
-				infromation_title: Joi.string(),
-				infromation: Joi.string(),
+			information: Joi.array().items(Joi.object().keys({
+				information_title: Joi.string(),
+				information: Joi.string(),
 				
 			})),
 		}
 	},
 	handler: function (request, reply) {
-		var Organize = new OrganizeModel(request.payload);
-		Organize.save(function (error) {
+		var Class = new ClassModel(request.payload);
+		Class.save(function (error) {
 			if (error) {
 				reply({
 					statusCode: 503,
 					message: error
 				});
 			} else {
-				ClassUserModel.findOneAndUpdate({_id: request.payload.user_id}, { $push: { classes: Organize._id } }, function (error, data) {
+				ClassUserModel.findOneAndUpdate({_id: request.payload.user_id}, { $push: { classes: Class._id } }, function (error, data) {
 					if (error) {
 						reply({
 							statusCode: 503,
@@ -103,7 +103,7 @@ exports.delete = {
 		}
 	},
 	handler: function (request, reply) {
-		OrganizeModel.findOneAndRemove({_id: request.params.id}, function (error) {
+		ClassModel.findOneAndRemove({_id: request.params.id}, function (error) {
 			if (error) {
 				reply({
 					statusCode: 503,

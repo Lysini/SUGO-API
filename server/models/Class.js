@@ -1,7 +1,7 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
-var OrganizeSchema = new mongoose.Schema({
+var ClassSchema = new mongoose.Schema({
   user_id: {
     type: String,
   },
@@ -9,16 +9,16 @@ var OrganizeSchema = new mongoose.Schema({
     type: String
   },
   calendar: [{
-  	date_from: { 
-  		type: Date
-  	},
-  	date_to: { 
-  		type: Date
-  	},
-    name: {
+    title: {
       type: String
     },
-    note: { 
+  	start: { 
+  		type: Date
+  	},
+  	end: { 
+  		type: Date
+  	},
+    desc: { 
   		type: String
   	},
   }],
@@ -30,14 +30,14 @@ var OrganizeSchema = new mongoose.Schema({
       type: Number
     },
   }],
-  infromation: [{
-    infromation_title: {
+  information: [{
+    information_title: {
       type: String
     },
-    infromation: {
+    information_message: {
       type: String
     },
   }],
 });
 
-module.exports = mongoose.model('Organize', OrganizeSchema, 'Organize');
+module.exports = mongoose.model('Class', ClassSchema, 'Class');

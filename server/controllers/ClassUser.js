@@ -30,7 +30,7 @@ exports.getAll = {
                     data: data
                 });
             }
-        }).populate('ClassUser');
+        }).populate('classes');
     }
 };
 

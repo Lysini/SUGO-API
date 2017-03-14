@@ -90,6 +90,90 @@ exports.save = {
 	}
 };
 
+exports.update = {
+	cors: {
+		origin: ['*']
+	},
+	tags: ['api'],
+	description: 'Update specific user data',
+	notes: 'Update specific user data',
+	validate: {
+		params: {
+			id: Joi.string().required(),
+			content: Joi.string()
+		},
+		payload: {
+			calendar: Joi.object().keys({
+				title: Joi.string(),
+				start: Joi.date(),
+				end: Joi.date(),
+				desc: Joi.string(),
+			}),
+			collections: Joi.object().keys({
+				collection_aim: Joi.string(),
+				collection_value: Joi.number(),
+			}),
+			information: Joi.object().keys({
+				information_title: Joi.string(),
+				information: Joi.string(),
+			}),
+		}
+	},
+	handler: function (request, reply) {
+		if(request.params.content === 'collections') { 
+			ClassModel.findOneAndUpdate({_id: request.params.id}, { $push: { collections: request.payload.collections } }, function (error, data) {
+				if (error) {
+					reply({
+						statusCode: 503,
+						message: 'Failed to get data',
+						data: error
+					});
+				} else {
+					reply({
+						statusCode: 200,
+						message: 'User Updated Successfully',
+						data: data
+					});
+				}
+			});
+		}
+		if(request.params.content === 'information') { 
+			ClassModel.findOneAndUpdate({_id: request.params.id}, request.payload, function (error, data) {
+				if (error) {
+					reply({
+						statusCode: 503,
+						message: 'Failed to get data',
+						data: error
+					});
+				} else {
+					reply({
+						statusCode: 200,
+						message: 'User Updated Successfully',
+						data: data
+					});
+				}
+			});
+		}
+		if(request.params.content === 'calendar') { 
+			ClassModel.findOneAndUpdate({_id: request.params.id}, request.payload, function (error, data) {
+				if (error) {
+					reply({
+						statusCode: 503,
+						message: 'Failed to get data',
+						data: error
+					});
+				} else {
+					reply({
+						statusCode: 200,
+						message: 'User Updated Successfully',
+						data: data
+					});
+				}
+			});
+		}
+	}
+};
+
 exports.delete = {
 	cors: {
 		origin: ['*']

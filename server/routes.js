@@ -24,5 +24,6 @@ exports.endpoints = [
   { method: 'GET', path: '/classuser/{id}/classes', config: ClassUser.getUserClasses},
   { method: 'GET', path: '/class', config: Class.getAll},
   { method: 'POST', path: '/class', config: Class.save},
+  { method: 'PUT', path: '/class/{id}/update/{content}', config: Class.update},
   { method: 'DELETE', path: '/class/{id}/delete', config: Class.delete},
 ];

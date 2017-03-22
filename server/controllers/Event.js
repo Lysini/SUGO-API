@@ -31,6 +31,45 @@ exports.getAll = {
     }
 };
 
+exports.getOne = {
+ cors: {
+  origin: ['*']
+ },
+ tags: ['api'],
+ description: 'Get All User data',
+ notes: 'Get All User data',
+ validate: {
+            params: {
+             id: Joi.string().required()
+            }
+        },
+    handler: function (request, reply) {
+        EventModel.findOne({_id: request.params.id}, function (error, data) {
+            if (error) {
+                reply({
+                    statusCode: 503,
+                    message: 'Failed to get data',
+                    data: error
+                });
+            } else {
+                if (data.length === 0) {
+                    reply({
+                        statusCode: 200,
+                        message: 'User Not Found',
+                        data: data
+                    });
+                } else {
+                    reply({
+                        statusCode: 200,
+                        message: 'User Data Successfully Fetched',
+                        data: data
+                    });
+                }
+            }
+        });
+    }
+};
+
 exports.save = {
 	cors: {
 		origin: ['*']

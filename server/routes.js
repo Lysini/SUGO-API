@@ -14,6 +14,7 @@ exports.endpoints = [
   { method: 'PUT', path: '/user/{id}/update-avatar', config: User.updateAvatar},
   { method: 'PUT', path: '/user/{id}/change-password', config: User.changePassword},
   { method: 'GET', path: '/event', config: Event.getAll},
+  { method: 'GET', path: '/event/{id}', config: Event.getOne},
   { method: 'POST', path: '/event', config: Event.save},
   { method: 'PUT', path: '/event/{id}/update', config: Event.update},
   { method: 'DELETE', path: '/event/{id}/delete', config: Event.delete},

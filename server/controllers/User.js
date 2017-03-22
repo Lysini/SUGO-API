@@ -16,7 +16,7 @@ exports.getAll = {
 	description: 'Get All User data',
 	notes: 'Get All User data',
     handler: function (request, reply) {
-        UserModel.find({}, function (error, data) {
+        UserModel.find({}, '-_id', function (error, data) {
             if (error) {
                 reply({
                     statusCode: 503,
@@ -74,6 +74,45 @@ exports.getUser = {
     }
 };
 
+exports.getUserProfile = {
+	cors: {
+		origin: ['*']
+	},
+	tags: ['api'],
+	description: 'Get All User data',
+	notes: 'Get All User data',
+	validate: {
+            params: {
+            	login: Joi.string().required()
+            }
+        },
+    handler: function (request, reply) {
+        UserModel.findOne({login: request.params.login}, '-_id', function (error, data) {
+            if (error) {
+                reply({
+                    statusCode: 503,
+                    message: 'Failed to get data',
+                    data: error
+                });
+            } else {
+                if (data.length === 0) {
+                    reply({
+                        statusCode: 200,
+                        message: 'User Not Found',
+                        data: data
+                    });
+                } else {
+                    reply({
+                        statusCode: 200,
+                        message: 'User Data Successfully Fetched',
+                        data: data
+                    });
+                }
+            }
+        });
+    }
+};
+
 exports.logIn = {
 	cors: {
 		origin: ['*']
@@ -83,12 +122,13 @@ exports.logIn = {
 	notes: 'Get All User data',
 	validate: {
 		payload: {
-			email: Joi.string().required().email(),
+			login: Joi.string(),
+			email: Joi.string().email(),
 			password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required()
 		}
 	},
     handler: function (request, reply) {
-		UserModel.findOne({ email: request.payload.email }, function(err, User) {
+		UserModel.findOne({ email: request.payload.email, login: request.payload.login }, function(err, User) {
 		    if (err) throw err;
 		    User.comparePassword(request.payload.password, function(err, isMatch) {
 		        if (err) {
@@ -102,7 +142,9 @@ exports.logIn = {
 	                reply({
 	                    statusCode: 200,
 	                    message: 'User Logged Successfully',
-	                    data: User._id
+	                    id: User._id,
+	                    name: User.name
+
 	                });
 	            }
 	            else {
@@ -128,7 +170,8 @@ exports.signUp = {
 			name: Joi.string().min(3).max(30).required(),
 			email: Joi.string().required().email(),
 			password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required(),
-			password_confirmation: Joi.any().valid(Joi.ref('password')).required()
+			password_confirmation: Joi.any().valid(Joi.ref('password')).required(),
+			login: Joi.string().min(3).max(30).required()
 		}
 	},
 	handler: function (request, reply) {

@@ -122,13 +122,12 @@ exports.logIn = {
 	notes: 'Get All User data',
 	validate: {
 		payload: {
-			login: Joi.string(),
 			email: Joi.string().email(),
-			password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required()
+			password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required(),
 		}
 	},
     handler: function (request, reply) {
-		UserModel.findOne({ email: request.payload.email, login: request.payload.login }, function(err, User) {
+		UserModel.findOne({ email: request.payload.email }, request.payload, function(err, User) {
 		    if (err) throw err;
 		    User.comparePassword(request.payload.password, function(err, isMatch) {
 		        if (err) {
@@ -142,8 +141,10 @@ exports.logIn = {
 	                reply({
 	                    statusCode: 200,
 	                    message: 'User Logged Successfully',
-	                    id: User._id,
-	                    name: User.name
+	                    data:{
+	                    	Name: User.name,
+	                   		id: User._id
+	                    }
 
 	                });
 	            }

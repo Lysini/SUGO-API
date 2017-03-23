@@ -20,7 +20,6 @@ var UserSchema = new mongoose.Schema({
   login: {
     type: String,
     required: true,
-    unique: true,
     select: false
   },
   name: {

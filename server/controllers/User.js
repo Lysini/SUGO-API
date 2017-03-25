@@ -138,11 +138,12 @@ exports.logIn = {
 	                });
 	            }
 				else if (isMatch) {
+					console.log(User);
 	                reply({
 	                    statusCode: 200,
 	                    message: 'User Logged Successfully',
 	                    data:{
-	                    	Name: User.name,
+	                    	name: User.name,
 	                   		id: User._id
 	                    }
 

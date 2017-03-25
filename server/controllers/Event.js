@@ -10,8 +10,8 @@ exports.getAll = {
 		origin: ['*']
 	},
 	tags: ['api'],
-	description: 'Get All User data',
-	notes: 'Get All User data',
+	description: 'Get all events',
+	notes: 'Get all events',
     handler: function (request, reply) {
         EventModel.find({}, function (error, data) {
             if (error) {
@@ -23,7 +23,7 @@ exports.getAll = {
             } else {
                 reply({
                     statusCode: 200,
-                    message: 'User Data Successfully Fetched',
+                    message: 'Events Successfully Fetched',
                     data: data
                 });
             }
@@ -36,8 +36,8 @@ exports.getOne = {
   origin: ['*']
  },
  tags: ['api'],
- description: 'Get All User data',
- notes: 'Get All User data',
+ description: 'Get specific event',
+ notes: 'Get specific event',
  validate: {
             params: {
              id: Joi.string().required()
@@ -55,13 +55,13 @@ exports.getOne = {
                 if (data.length === 0) {
                     reply({
                         statusCode: 200,
-                        message: 'User Not Found',
+                        message: 'Event Not Found',
                         data: data
                     });
                 } else {
                     reply({
                         statusCode: 200,
-                        message: 'User Data Successfully Fetched',
+                        message: 'Event Data Successfully Fetched',
                         data: data
                     });
                 }
@@ -75,8 +75,8 @@ exports.save = {
 		origin: ['*']
 	},
 	tags: ['api'],
-	description: 'Save event data',
-	notes: 'Save event data',
+	description: 'Save event',
+	notes: 'Save event and push its id into User events array',
 	validate: {
 		payload: {
 			organizer_id: Joi.string().required(),
@@ -130,7 +130,7 @@ exports.save = {
 					} else {
 						reply({
 							statusCode: 200,
-							message: 'User Updated Successfully',
+							message: 'User events array Updated Successfully',
 							data: data
 						});
 					}
@@ -145,8 +145,8 @@ exports.update = {
 		origin: ['*']
 	},
 	tags: ['api'],
-	description: 'Update specific user data',
-	notes: 'Update specific user data',
+	description: 'Update specific Event data',
+	notes: 'Update specific Event data',
 	validate: {
 		params: {
 			id: Joi.string().required()
@@ -197,7 +197,7 @@ exports.update = {
 			} else {
 				reply({
 					statusCode: 200,
-					message: 'User Updated Successfully',
+					message: 'Event Updated Successfully',
 					data: data
 				});
 			}
@@ -211,8 +211,8 @@ exports.delete = {
 		origin: ['*']
 	},
 	tags: ['api'],
-	description: 'Remove specific user data',
-	notes: 'Remove specific user data',
+	description: 'Remove specific Event data',
+	notes: 'Remove specific Event data',
 	validate: {
 		params: {
 			id: Joi.string().required()
@@ -223,13 +223,13 @@ exports.delete = {
 			if (error) {
 				reply({
 					statusCode: 503,
-					message: 'Error in removing User',
+					message: 'Error in removing Event',
 					data: error
 				});
 			} else {
 				reply({
 					statusCode: 200,
-					message: 'User Deleted Successfully'
+					message: 'Event Deleted Successfully'
 				});
 			}
 		});

@@ -39,8 +39,8 @@ exports.getUser = {
 		origin: ['*']
 	},
 	tags: ['api'],
-	description: 'Get All User data',
-	notes: 'Get All User data',
+	description: 'Get specific User data',
+	notes: 'Get specific User data',
 	validate: {
             params: {
             	id: Joi.string().required()
@@ -79,8 +79,8 @@ exports.getUserProfile = {
 		origin: ['*']
 	},
 	tags: ['api'],
-	description: 'Get All User data',
-	notes: 'Get All User data',
+	description: "Get specific User's profile data",
+	notes: "Get specific User's profile data",
 	validate: {
             params: {
             	login: Joi.string().required()
@@ -118,44 +118,57 @@ exports.logIn = {
 		origin: ['*']
 	},
 	tags: ['api'],
-	description: 'Get All User data',
-	notes: 'Get All User data',
+	description: 'Log in user',
+	notes: 'Log in User, in response you get User name and id',
 	validate: {
 		payload: {
-			email: Joi.string().email(),
+			email: Joi.string().email().required(),
 			password: Joi.string().regex(/^[a-zA-Z0-9]{3,30}$/).required(),
 		}
 	},
     handler: function (request, reply) {
-		UserModel.findOne({ email: request.payload.email }, request.payload, function(err, User) {
-		    if (err) throw err;
-		    User.comparePassword(request.payload.password, function(err, isMatch) {
-		        if (err) {
+		UserModel.findOne({ email: request.payload.email }, 'password name', function(err, User) {
+		    if (err) {
 	                reply({
 	                    statusCode: 503,
 	                    message: 'Failed to get data',
 	                    data: err
 	                });
-	            }
-				else if (isMatch) {
-					console.log(User);
-	                reply({
-	                    statusCode: 200,
-	                    message: 'User Logged Successfully',
-	                    data:{
-	                    	name: User.name,
-	                   		id: User._id
-	                    }
-
-	                });
-	            }
-	            else {
-	                reply({
+	        }
+	        if (User === null) {
+	        		reply({
 	                    statusCode: 403,
-	                    message: 'User Bad Password'
+	                    message: 'Something gone wrong. Please try again.'
 	                });
-	            }
-		    });
+	        }
+	        else {
+			    User.comparePassword(request.payload.password, function(err, isMatch) {
+			        if (err) {
+		                reply({
+		                    statusCode: 503,
+		                    message: 'Failed to get data',
+		                    data: err
+		                });
+		            }
+					else if (isMatch) {
+		                reply({
+		                    statusCode: 200,
+		                    message: 'User Logged Successfully',
+		                    data:{
+		                    	name: User.name,
+		                   		id: User._id
+		                    }
+
+		                });
+		            }
+		            else {
+		                reply({
+		                    statusCode: 403,
+		                    message: 'Bad password'
+		                });
+		            }
+			    });
+		}
 		});
    }
 };
@@ -165,8 +178,8 @@ exports.signUp = {
 		origin: ['*']
 	},
 	tags: ['api'],
-	description: 'Save user data',
-	notes: 'Save user data',
+	description: 'Sign up and save user',
+	notes: 'Sign up and save user',
 	validate: {
 		payload: {
 			name: Joi.string().min(3).max(30).required(),
@@ -188,7 +201,7 @@ exports.signUp = {
         	} else {
         		reply({
         			statusCode: 201,
-        			message: 'User Saved Successfully'
+        			message: 'User signed up and saved successfully'
         		});
         	}
         });
@@ -200,17 +213,16 @@ exports.update = {
 		origin: ['*']
 	},
 	tags: ['api'],
-	description: 'Update specific user data',
-	notes: 'Update specific user data',
+	description: 'Update user',
+	notes: 'Use to update one of user: name, age, note',
 	validate: {
 		params: {
 			id: Joi.string().required()
 		},
 		payload: {
 			name: Joi.string(),
-			avatar: Joi.any(),
 			age: Joi.number(),
-			note: Joi.number()
+			note: Joi.string()
 		}
 	},
 	handler: function (request, reply) {
@@ -238,8 +250,8 @@ exports.updateAvatar = {
 		origin: ['*']
 	},
 	tags: ['api'],
-	description: 'Update specific user data',
-	notes: 'Update specific user data',
+	description: 'Update user avatar',
+	notes: 'Use to update user avatar',
 	validate: {
 		params: {
 			id: Joi.string().required()
@@ -259,7 +271,7 @@ exports.updateAvatar = {
 			} else {
 				reply({
 					statusCode: 200,
-					message: 'User Updated Successfully',
+					message: 'User Avatar Updated Successfully',
 					data: data
 				});
 			}
@@ -274,8 +286,8 @@ exports.getUserEvents = {
 		origin: ['*']
 	},
 	tags: ['api'],
-	description: 'Get All User data',
-	notes: 'Get All User data',
+	description: 'Get User events',
+	notes: 'Get User events',
 	validate: {
 		params: {
 			id: Joi.string().required()
@@ -313,8 +325,8 @@ exports.changePassword = {
 		origin: ['*']
 	},
 	tags: ['api'],
-	description: 'Update specific user data',
-	notes: 'Update specific user data',
+	description: 'Change password of User',
+	notes: 'Change password of User',
 	validate: {
 		params: {
 			id: Joi.string().required()

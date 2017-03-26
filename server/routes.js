@@ -18,7 +18,7 @@ exports.endpoints = [
   { method: 'GET', path: '/event', config: Event.getAll},
   { method: 'GET', path: '/event/{id}', config: Event.getOne},
   { method: 'POST', path: '/event', config: Event.save},
-  { method: 'PUT', path: '/event/{id}/update', config: Event.update},
+  { method: 'PUT', path: '/event/{id}/update/{content}', config: Event.update},
   { method: 'DELETE', path: '/event/{id}/delete', config: Event.delete},
 
 

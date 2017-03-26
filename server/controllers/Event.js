@@ -149,62 +149,103 @@ exports.update = {
 	notes: 'Update specific Event data',
 	validate: {
 		params: {
-			id: Joi.string().required()
+			id: Joi.string().required(),
+			content: Joi.string().required()
 		},
 		payload: {
-			organizer_id: Joi.string().required(),
-			event_name: Joi.string().required(),
-			stuff: Joi.object({
-				stuff_label: Joi.string().required(),
-				stuff_array: Joi.array().items(Joi.object({
-					stuff_name: Joi.string(),
-					stuff_price: Joi.number(),
-					stuff_amount: Joi.number()
+			event_name: Joi.string(),
+			stuff: Joi.array().items(Joi.object().keys({
+				labelName: Joi.string(),
+				stuffArray: Joi.array().items(Joi.object().keys({
+					stuffName: Joi.string(),
+					stuffPrice: Joi.number(),
+					stuffAmount: Joi.number()
+				}))
+			})),
+			people: Joi.object({
+				peopleMen: Joi.array().items(Joi.object({
+					peopleName: Joi.string(),
+					peopleNote: Joi.string()
+				})
+				),
+				peopleWomen: Joi.array().items(Joi.object({
+					peopleName: Joi.string(),
+					peopleNote: Joi.string()
 				})
 				)
 			}),
-			people: Joi.object({
-				people_men: Joi.array().items(Joi.object({
-					men_name: Joi.string(),
-					men_note: Joi.string()
-				})
-				),
-				people_women: Joi.array().items(Joi.object({
-					women_name: Joi.string(),
-					women_note: Joi.string()
-				})
-				),
-				people_number: Joi.number().required()
-			}),
 			place: Joi.object({
-				place_name: Joi.string().required(),
-				place_location: Joi.string().required(),
-				place_price: Joi.number().required(),
-				place_max_people: Joi.number().required(),
-				place_note: Joi.string().required()
+				placeName: Joi.string(),
+				placeLocation: Joi.string(),
+				placePrice: Joi.number(),
+				placeMax: Joi.number(),
+				placeNote: Joi.string()
 			}),
-			special_info: Joi.string().required()
+			special_info: Joi.string()
 		}
 	},
 	handler: function (request, reply) {
-		EventModel.findOneAndUpdate({_id: request.params.id}, request.payload, function (error, data) {
-			if (error) {
-				reply({
-					statusCode: 503,
-					message: 'Failed to get data',
-					data: error
-				});
-			} else {
-				reply({
-					statusCode: 200,
-					message: 'Event Updated Successfully',
-					data: data
-				});
-			}
-		});
+		if(request.params.content === 'stuff') { 
+			EventModel.findOneAndUpdate({_id: request.params.id}, { stuff: request.payload.stuff }, function (error, data) {
+				if (error) {
+					reply({
+						statusCode: 503,
+						message: 'Failed to get data',
+						data: error
+					});
+				} else {
+					reply({
+						statusCode: 200,
+						message: 'User event stuff updated successfully',
+						data: data
+					});
+				}
+			});
+		}
+		if(request.params.content === 'people') { 
+			EventModel.findOneAndUpdate({_id: request.params.id}, { people: request.payload.people }, function (error, data) {
+				if (error) {
+					reply({
+						statusCode: 503,
+						message: 'Failed to get data',
+						data: error
+					});
+				} else {
+					reply({
+						statusCode: 200,
+						message: 'User event people updated successfully',
+						data: data
+					});
+				}
+			});
+		}
+		if(request.params.content === 'general-info') { 
+			EventModel.findOneAndUpdate({_id: request.params.id}, { event_name: request.payload.event_name, place: request.payload.place, special_info: request.payload.special_info }, function (error, data) {
+				if (error) {
+					reply({
+						statusCode: 503,
+						message: 'Failed to get data',
+						data: error
+					});
+				} else {
+					reply({
+						statusCode: 200,
+						message: 'User event general information updated successfully',
+						data: data
+					});
+				}
+			});
+		}
+		if(request.params.content === '') { 
+			reply({
+				statusCode: 503,
+				message: 'Failed to get data'
+			});
+		}
 
 	}
 };
+
 
 exports.delete = {
 	cors: {

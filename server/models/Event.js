@@ -1,6 +1,15 @@
 var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
+var peopleMen = new mongoose.Schema({
+      peopleName: {
+        type: String
+      },
+      peopleNote: {
+        type: String
+      },
+});
+
 var EventSchema = new mongoose.Schema({
   event_name: {
     type: String
@@ -18,7 +27,8 @@ var EventSchema = new mongoose.Schema({
       },
       stuffPrice: {
         type: Number
-      }
+      },
+      _id: false
     }],
   }],
   people: {
@@ -29,6 +39,7 @@ var EventSchema = new mongoose.Schema({
       peopleNote: {
         type: String
       },
+      _id: false
     }],
     peopleWomen: [{
       peopleName: {
@@ -37,6 +48,7 @@ var EventSchema = new mongoose.Schema({
       peopleNote: {
         type: String
       },
+      _id: false
     }]
   },
   place: {

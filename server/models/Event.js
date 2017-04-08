@@ -30,6 +30,7 @@ var EventSchema = new mongoose.Schema({
       },
       _id: false
     }],
+      _id: false
   }],
   people: {
     peopleMen: [{

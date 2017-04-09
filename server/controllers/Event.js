@@ -108,7 +108,9 @@ exports.save = {
 				placeMax: Joi.number(),
 				placeNote: Joi.string()
 			}),
-			special_info: Joi.string()
+			special_info: Joi.string(),
+			start_date: Joi.date(),
+			end_date: Joi.date()
 		}
 	},
 	handler: function (request, reply) {
@@ -181,7 +183,9 @@ exports.update = {
 				placeMax: Joi.number(),
 				placeNote: Joi.string()
 			}),
-			special_info: Joi.string()
+			special_info: Joi.string(),
+			start_date: Joi.date(),
+			end_date: Joi.date()
 		}
 	},
 	handler: function (request, reply) {
@@ -220,7 +224,7 @@ exports.update = {
 			});
 		}
 		if(request.params.content === 'general-info') { 
-			EventModel.findOneAndUpdate({_id: request.params.id}, { event_name: request.payload.event_name, place: request.payload.place, special_info: request.payload.special_info }, function (error, data) {
+			EventModel.findOneAndUpdate({_id: request.params.id}, { event_name: request.payload.event_name, place: request.payload.place, special_info: request.payload.special_info, start_date: request.payload.start_date, end_date: request.payload.end_date }, function (error, data) {
 				if (error) {
 					reply({
 						statusCode: 503,

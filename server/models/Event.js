@@ -71,6 +71,12 @@ var EventSchema = new mongoose.Schema({
   },
   special_info: {
     type: String
+  },
+  start_date: {
+    type: Date
+  },
+  end_date: {
+    type: Date
   }
 });
 

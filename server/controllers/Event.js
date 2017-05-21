@@ -109,8 +109,8 @@ exports.save = {
 				placeNote: Joi.string()
 			}),
 			special_info: Joi.string(),
-			start_date: Joi.date(),
-			end_date: Joi.date()
+			start_date: Joi.string(),
+			end_date: Joi.string()
 		}
 	},
 	handler: function (request, reply) {
@@ -184,8 +184,8 @@ exports.update = {
 				placeNote: Joi.string()
 			}),
 			special_info: Joi.string(),
-			start_date: Joi.date(),
-			end_date: Joi.date()
+			start_date: Joi.string(),
+			end_date: Joi.string()
 		}
 	},
 	handler: function (request, reply) {

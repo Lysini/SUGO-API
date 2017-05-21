@@ -73,10 +73,10 @@ var EventSchema = new mongoose.Schema({
     type: String
   },
   start_date: {
-    type: Date
+    type: String
   },
   end_date: {
-    type: Date
+    type: String
   }
 });
 

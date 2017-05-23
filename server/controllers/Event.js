@@ -122,7 +122,7 @@ exports.save = {
 					message: error
 				});
 			} else {
-				UserModel.findOneAndUpdate({_id: request.payload.organizer_id}, { $push: { events: Event._id } }, function (error, data) {
+				UserModel.findOneAndUpdate({_id: request.payload.organizer_id}, { $push: { events: Event._id } }, '-_id', function (error, data) {
 					if (error) {
 						reply({
 							statusCode: 503,
@@ -133,7 +133,8 @@ exports.save = {
 						reply({
 							statusCode: 200,
 							message: 'User events array Updated Successfully',
-							data: data
+							data: data,
+							eventId: Event._id
 						});
 					}
 				});
